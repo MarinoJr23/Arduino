@@ -1,0 +1,38 @@
+#include <LiquidCrystal.h>
+
+// Define os pinos usados para o display LCD
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+// Define o pino do sensor de batimentos cardíacos
+const int sensorPin = A0;
+
+void setup() {
+  // Inicializa o display LCD com 16 colunas e 2 linhas
+  lcd.begin(16, 2);
+  
+  // Define a taxa de transmissão serial para 9600 bps
+  Serial.begin(9600);
+}
+void loop() {
+  // Lê o valor do sensor de batimentos cardíacos
+  int sensorValue = analogRead(sensorPin);
+    // Converte o valor lido para uma frequência cardíaca (apenas um exemplo, pode variar dependendo do sensor)
+  int bpm = map(sensorValue, 0, 1023, 50, 150); // Mapeia o valor do sensor para o intervalo de 50 a 150 bpm
+    // Exibe a frequência cardíaca no monitor serial
+  Serial.print("Frequencia Cardiaca: ");
+  Serial.print(bpm);
+  Serial.println(" bpm");
+  
+  // Limpa o display LCD
+  lcd.clear();
+  
+  // Exibe a frequência cardíaca no display LCD
+  lcd.setCursor(0, 0);
+  lcd.print("Freq. Cardiaca:");
+  lcd.setCursor(0, 1);
+  lcd.print(bpm);
+  lcd.print(" bpm");
+    // Aguarda 1 segundo antes de fazer a próxima leitura
+  delay(1000);
+}
