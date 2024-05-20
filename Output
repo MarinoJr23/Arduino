@@ -1,0 +1,29 @@
+static int outputType = SERIAL_PLOTTER;
+
+void setup(){
+  pinMode(blinkPin,OUTPUT);         // Declarando os leds como saída!
+  pinMode(fadePin,OUTPUT);
+  Serial.begin(115200);
+  interruptSetup();                 // Ativa a função para fazer a leitura a cada 2ms
+}
+
+void loop(){
+
+    serialOutput();
+
+if (QS == true){       // Uma pulsação foi encontrada
+                       // Então vamos calcular o BPM e o IBI dele
+                       
+   fadeRate = 255;                  // Faz o efeito 'Fade
+   serialOutputWhenBeatHappens();
+   QS = false;                      
+  }
+  ledFadeToBeat();                       // Faz o efeito 'Fade' acontecer
+  delay(95);                             // Dê uma pausa
+}
+//-------------------------------------------------------------------
+void ledFadeToBeat(){
+    fadeRate -= 30;                         
+    fadeRate = constrain(fadeRate,0,255);
+    analogWrite(fadePin,fadeRate);
+  }
