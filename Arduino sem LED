@@ -1,0 +1,36 @@
+#include <PulseSensorPlayground.h>
+
+// Definindo os pinos
+const int PulseWire = A0;       // Pino onde o sensor está conectado
+const int Threshold = 550;      // Limiar de batimento (ajuste conforme necessário)
+
+// Criando um objeto PulseSensor
+PulseSensorPlayground pulseSensor;
+
+void setup() {
+  // Inicializando o sensor
+  Serial.begin(9600);           // Inicializando a comunicação serial para debug
+
+  // Configurando o PulseSensor
+  pulseSensor.analogInput(PulseWire);
+  pulseSensor.setThreshold(Threshold);
+
+  // Inicializando o PulseSensor
+  if (pulseSensor.begin()) {
+    Serial.println("PulseSensor funcionando corretamente!");
+  }
+}
+
+void loop() {
+  int myBPM = pulseSensor.getBeatsPerMinute(); // Obtém os batimentos por minuto
+  
+  // Verificando se há novos batimentos
+  if (pulseSensor.sawStartOfBeat()) {
+    Serial.println("Batimento detectado!");
+    Serial.print("BPM: ");
+    Serial.println(myBPM);
+  }
+
+  // Espera por 20 milissegundos para a próxima leitura
+  delay(20);
+}
